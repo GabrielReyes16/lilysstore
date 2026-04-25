@@ -7,11 +7,11 @@ import './Admin.css';
 
 export default function Admin({ session }) {
   const [activeTab, setActiveTab] = useState('products'); // 'products' or 'categories'
-  
+
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
-  
+
   // Product Form State
   const [isEditingProduct, setIsEditingProduct] = useState(false);
   const [currentProductId, setCurrentProductId] = useState(null);
@@ -91,11 +91,11 @@ export default function Admin({ session }) {
   const handleDeleteProduct = (id) => {
     toast((t) => (
       <div>
-        <p style={{marginBottom: '0.5rem', fontSize: '0.9rem'}}>¿Seguro que deseas eliminar este producto?</p>
+        <p style={{ marginBottom: '0.5rem', fontSize: '0.9rem' }}>¿Seguro que deseas eliminar este producto?</p>
         <div style={{ display: 'flex', gap: '0.5rem' }}>
-          <button 
-            className="btn btn-primary" 
-            style={{padding: '0.25rem 0.6rem', fontSize: '0.8rem'}}
+          <button
+            className="btn btn-primary"
+            style={{ padding: '0.25rem 0.6rem', fontSize: '0.8rem' }}
             onClick={async () => {
               toast.dismiss(t.id);
               const { error } = await supabase.from('products').delete().eq('id', id);
@@ -110,7 +110,7 @@ export default function Admin({ session }) {
           >
             Eliminar
           </button>
-          <button className="btn btn-outline" style={{padding: '0.25rem 0.6rem', fontSize: '0.8rem'}} onClick={() => toast.dismiss(t.id)}>
+          <button className="btn btn-outline" style={{ padding: '0.25rem 0.6rem', fontSize: '0.8rem' }} onClick={() => toast.dismiss(t.id)}>
             Cancelar
           </button>
         </div>
@@ -190,9 +190,9 @@ export default function Admin({ session }) {
       const { error } = await supabase
         .from('categories')
         .insert([{ name: newCategoryName }]);
-      
+
       if (error) throw error;
-      
+
       setNewCategoryName('');
       fetchCategories();
       toast.success('Categoría creada!');
@@ -206,11 +206,11 @@ export default function Admin({ session }) {
   const handleDeleteCategory = (id) => {
     toast((t) => (
       <div>
-        <p style={{marginBottom: '0.5rem', fontSize: '0.9rem'}}>¿Eliminar esta categoría? Los productos vinculados quedarán en blanco.</p>
+        <p style={{ marginBottom: '0.5rem', fontSize: '0.9rem' }}>¿Eliminar esta categoría? Los productos vinculados quedarán en blanco.</p>
         <div style={{ display: 'flex', gap: '0.5rem' }}>
-          <button 
-            className="btn btn-primary" 
-            style={{padding: '0.25rem 0.6rem', fontSize: '0.8rem'}}
+          <button
+            className="btn btn-primary"
+            style={{ padding: '0.25rem 0.6rem', fontSize: '0.8rem' }}
             onClick={async () => {
               toast.dismiss(t.id);
               const { error } = await supabase.from('categories').delete().eq('id', id);
@@ -225,7 +225,7 @@ export default function Admin({ session }) {
           >
             Confirmar
           </button>
-          <button className="btn btn-outline" style={{padding: '0.25rem 0.6rem', fontSize: '0.8rem'}} onClick={() => toast.dismiss(t.id)}>
+          <button className="btn btn-outline" style={{ padding: '0.25rem 0.6rem', fontSize: '0.8rem' }} onClick={() => toast.dismiss(t.id)}>
             Cancelar
           </button>
         </div>
@@ -247,18 +247,18 @@ export default function Admin({ session }) {
       {/* Tabs Menu */}
       <div className="admin-tabs-container">
         <div className="container admin-tabs">
-          <button 
+          <button
             className={`tab-btn ${activeTab === 'products' ? 'active' : ''}`}
             onClick={() => setActiveTab('products')}
           >
-            <LayoutGrid size={16} className="inline-icon" style={{display: 'inline-block', verticalAlign: 'text-bottom'}} /> 
+            <LayoutGrid size={16} className="inline-icon" style={{ display: 'inline-block', verticalAlign: 'text-bottom' }} />
             Productos
           </button>
-          <button 
+          <button
             className={`tab-btn ${activeTab === 'categories' ? 'active' : ''}`}
             onClick={() => setActiveTab('categories')}
           >
-            <Tag size={16} className="inline-icon" style={{display: 'inline-block', verticalAlign: 'text-bottom'}} /> 
+            <Tag size={16} className="inline-icon" style={{ display: 'inline-block', verticalAlign: 'text-bottom' }} />
             Categorías
           </button>
         </div>
@@ -271,11 +271,11 @@ export default function Admin({ session }) {
               <h3>Nueva Categoría</h3>
               <form onSubmit={handleCategorySubmit} className="category-form">
                 <div className="form-group">
-                  <input 
-                    type="text" 
-                    className="form-control" 
-                    value={newCategoryName} 
-                    onChange={e => setNewCategoryName(e.target.value)} 
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={newCategoryName}
+                    onChange={e => setNewCategoryName(e.target.value)}
                     placeholder="Nombre de la categoría..."
                     required
                   />
@@ -311,20 +311,20 @@ export default function Admin({ session }) {
               <form onSubmit={handleProductSubmit} className="product-form">
                 <div className="form-row">
                   <div className="form-group">
-                    <label>Nombre del producto</label>
-                    <input 
-                      type="text" 
-                      className="form-control" 
-                      value={name} 
-                      onChange={e => setName(e.target.value)} 
-                      required 
+                    <label>Nombre</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={name}
+                      onChange={e => setName(e.target.value)}
+                      required
                     />
                   </div>
                   <div className="form-group">
                     <label>Categoría</label>
-                    <select 
-                      className="form-control" 
-                      value={categoryId} 
+                    <select
+                      className="form-control"
+                      value={categoryId}
                       onChange={e => setCategoryId(e.target.value)}
                     >
                       <option value="">-- Sin categoría --</option>
@@ -334,24 +334,24 @@ export default function Admin({ session }) {
                     </select>
                   </div>
                 </div>
-                
+
                 <div className="form-row">
                   <div className="form-group">
-                    <label>Precio ($)</label>
-                    <input 
-                      type="number" 
+                    <label>Precio (s/)</label>
+                    <input
+                      type="number"
                       step="0.01"
-                      className="form-control" 
-                      value={price} 
-                      onChange={e => setPrice(e.target.value)} 
-                      required 
+                      className="form-control"
+                      value={price}
+                      onChange={e => setPrice(e.target.value)}
+                      required
                     />
                   </div>
                   <div className="form-group">
                     <label>Imagen</label>
                     <div className="file-input-wrapper">
-                      <input 
-                        type="file" 
+                      <input
+                        type="file"
                         accept="image/*"
                         onChange={e => setImageFile(e.target.files[0])}
                         className="form-control file-input"
@@ -363,20 +363,20 @@ export default function Admin({ session }) {
 
                 <div className="form-group">
                   <label>Descripción</label>
-                  <textarea 
-                    className="form-control" 
+                  <textarea
+                    className="form-control"
                     rows="3"
-                    value={description} 
-                    onChange={e => setDescription(e.target.value)} 
+                    value={description}
+                    onChange={e => setDescription(e.target.value)}
                   ></textarea>
                 </div>
 
                 <div className="form-group checkbox-group">
-                  <input 
-                    type="checkbox" 
+                  <input
+                    type="checkbox"
                     id="isActive"
-                    checked={isActive} 
-                    onChange={e => setIsActive(e.target.checked)} 
+                    checked={isActive}
+                    onChange={e => setIsActive(e.target.checked)}
                   />
                   <label htmlFor="isActive">Producto visible en el catálogo público</label>
                 </div>

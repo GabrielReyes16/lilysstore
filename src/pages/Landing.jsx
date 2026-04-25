@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../services/supabaseClient';
 import './Landing.css';
-import { ShoppingBag, MessageCircle, Menu, X } from 'lucide-react';
+import { ShoppingBag, MessageCircle, Menu, X, MapPin, Phone } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export default function Landing() {
@@ -45,17 +45,17 @@ export default function Landing() {
       toast.error("Configurar el número de WhatsApp en .env.local");
       return;
     }
-    
+
     // Default country code could be hardcoded in the env or added here
     const message = `¡Hola! Vengo de Lily's Store y estoy interesado/a en el producto: *${product.name}* (Precio: $${product.price}). ¿Me pueden dar más información?`;
     const encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-    
+
     window.open(whatsappUrl, '_blank');
   };
 
-  const filteredProducts = selectedCategoryId === 'All' 
-    ? products 
+  const filteredProducts = selectedCategoryId === 'All'
+    ? products
     : products.filter(p => p.category_id === selectedCategoryId);
 
   return (
@@ -67,7 +67,7 @@ export default function Landing() {
             <ShoppingBag className="icon" />
             <h1>Lily's Store</h1>
           </div>
-          
+
           <div className="desktop-menu">
             <a href="/">Catálogo</a>
             <a href="/login" className="admin-link">Admin</a>
@@ -77,7 +77,7 @@ export default function Landing() {
             {menuOpen ? <X /> : <Menu />}
           </button>
         </div>
-        
+
         {/* Mobile Menu */}
         {menuOpen && (
           <div className="mobile-menu">
@@ -99,15 +99,15 @@ export default function Landing() {
       <main className="container main-content">
         {/* Categories Bar */}
         <div className="categories-wrapper">
-          <button 
+          <button
             className={`category-pill ${selectedCategoryId === 'All' ? 'active' : ''}`}
             onClick={() => setSelectedCategoryId('All')}
           >
             Todos
           </button>
           {categories.map(cat => (
-            <button 
-              key={cat.id} 
+            <button
+              key={cat.id}
               className={`category-pill ${selectedCategoryId === cat.id ? 'active' : ''}`}
               onClick={() => setSelectedCategoryId(cat.id)}
             >
@@ -135,13 +135,13 @@ export default function Landing() {
                     <span className="product-badge">{product.categories.name}</span>
                   )}
                 </div>
-                
+
                 <div className="product-info">
                   <h3>{product.name}</h3>
                   <p className="product-desc">{product.description}</p>
                   <div className="product-footer">
                     <span className="price">${product.price}</span>
-                    <button 
+                    <button
                       onClick={() => handleWhatsAppClick(product)}
                       className="btn btn-primary ws-btn"
                     >
@@ -154,9 +154,36 @@ export default function Landing() {
           </div>
         )}
       </main>
-      
+
       <footer className="footer">
-        <p>&copy; {new Date().getFullYear()} Lily's Store. Todos los derechos reservados.</p>
+        <div className="footer-top container">
+          <div className="footer-section">
+            <h4><ShoppingBag size={18} /> Lily's Store</h4>
+            <p>Tu catálogo de confianza con los mejores productos. Descubre nuestra colección y encuentra tus favoritos hoy mismo.</p>
+          </div>
+          <div className="footer-section">
+            <h4><MapPin size={18} /> Entregas</h4>
+            <p>Realizamos envíos en la zona del Callao (previa coordinación).</p>
+          </div>
+          <div className="footer-section">
+            <h4><Phone size={18} /> Contacto</h4>
+            <p>Escríbenos al número de WhatsApp que encontrarás en los botones de "Preguntar" de cualquiera de nuestros artículos para información o concretar compras.</p>
+          </div>
+        </div>
+        
+        <div className="footer-bottom">
+          <div className="container footer-bottom-inner">
+            <div className="copyright">
+              &copy; {new Date().getFullYear()} Lily's Store. Todos los derechos reservados.
+            </div>
+            <div className="developer">
+              Desarrollado por{' '}
+              <a href="https://portfolio-sigma-hazel-12.vercel.app/" target="_blank" rel="noopener noreferrer" className="dev-link">
+                Math
+              </a>
+            </div>
+          </div>
+        </div>
       </footer>
     </div>
   );
