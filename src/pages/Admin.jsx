@@ -184,6 +184,10 @@ export default function Admin({ session }) {
   const handleCategorySubmit = async (e) => {
     e.preventDefault();
     if (!newCategoryName.trim()) return;
+    if (newCategoryName.trim().length > 15) {
+      toast.error('El nombre no puede exceder los 15 caracteres');
+      return;
+    }
     setSavingCategory(true);
 
     try {
@@ -270,15 +274,20 @@ export default function Admin({ session }) {
             <section className="form-section">
               <h3>Nueva Categoría</h3>
               <form onSubmit={handleCategorySubmit} className="category-form">
-                <div className="form-group">
+                <div className="form-group" style={{ position: 'relative' }}>
                   <input
                     type="text"
                     className="form-control"
                     value={newCategoryName}
                     onChange={e => setNewCategoryName(e.target.value)}
                     placeholder="Nombre de la categoría..."
+                    maxLength={15}
                     required
+                    style={{ paddingRight: '45px' }}
                   />
+                  <span style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', fontSize: '0.75rem', color: 'var(--muted-foreground)', pointerEvents: 'none' }}>
+                    {newCategoryName.length.toString().padStart(2, '0')}/15
+                  </span>
                 </div>
                 <button type="submit" className="btn btn-primary" disabled={savingCategory}>
                   {savingCategory ? 'Creando...' : 'Añadir'}

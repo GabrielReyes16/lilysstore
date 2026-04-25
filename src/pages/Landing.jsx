@@ -98,22 +98,24 @@ export default function Landing() {
       {/* Content */}
       <main className="container main-content">
         {/* Categories Bar */}
-        <div className="categories-wrapper">
-          <button
-            className={`category-pill ${selectedCategoryId === 'All' ? 'active' : ''}`}
-            onClick={() => setSelectedCategoryId('All')}
-          >
-            Todos
-          </button>
-          {categories.map(cat => (
+        <div className="categories-container">
+          <div className="categories-wrapper">
             <button
-              key={cat.id}
-              className={`category-pill ${selectedCategoryId === cat.id ? 'active' : ''}`}
-              onClick={() => setSelectedCategoryId(cat.id)}
+              className={`category-pill ${selectedCategoryId === 'All' ? 'active' : ''}`}
+              onClick={() => setSelectedCategoryId('All')}
             >
-              {cat.name}
+              Todos
             </button>
-          ))}
+            {categories.map(cat => (
+              <button
+                key={cat.id}
+                className={`category-pill ${selectedCategoryId === cat.id ? 'active' : ''}`}
+                onClick={() => setSelectedCategoryId(cat.id)}
+              >
+                {cat.name}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Product Grid */}
@@ -157,20 +159,20 @@ export default function Landing() {
 
       <footer className="footer">
         <div className="footer-top container">
-          <div className="footer-section">
+          <div className="footer-section" id='about'>
             <h4><ShoppingBag size={18} /> Lily's Store</h4>
             <p>Tu catálogo de confianza con los mejores productos. Descubre nuestra colección y encuentra tus favoritos hoy mismo.</p>
           </div>
-          <div className="footer-section">
+          <div className="footer-section" id='delivery'>
             <h4><MapPin size={18} /> Entregas</h4>
             <p>Realizamos envíos en la zona del Callao (previa coordinación).</p>
           </div>
-          <div className="footer-section">
+          <div className="footer-section" id='contact'>
             <h4><Phone size={18} /> Contacto</h4>
-            <p>Escríbenos al número de WhatsApp que encontrarás en los botones de "Preguntar" de cualquiera de nuestros artículos para información o concretar compras.</p>
+            <p>Presiona "Preguntar" de cualquiera de nuestros artículos para información o concretar compras.</p>
           </div>
         </div>
-        
+
         <div className="footer-bottom">
           <div className="container footer-bottom-inner">
             <div className="copyright">
