@@ -2,41 +2,47 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../services/supabaseClient';
 import './Landing.css';
 import { ShoppingBag, MessageCircle, Menu, X } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 export default function Landing() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedCategoryId, setSelectedCategoryId] = useState('All');
   const [loading, setLoading] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    fetchProducts();
+    fetchData();
   }, []);
 
-  const fetchProducts = async () => {
-    const { data, error } = await supabase
-      .from('products')
+  const fetchData = async () => {
+    setLoading(true);
+    // Fetch Categories
+    const { data: catData, error: catError } = await supabase
+      .from('categories')
       .select('*')
+      .order('name', { ascending: true });
+
+    if (catError) console.error('Error fetching categories:', catError);
+    else setCategories(catData || []);
+
+    // Fetch Products
+    const { data: prodData, error: prodError } = await supabase
+      .from('products')
+      .select('*, categories(name)')
       .eq('is_active', true)
       .order('created_at', { ascending: false });
 
-    if (error) {
-      console.error('Error fetching products:', error);
-    } else {
-      setProducts(data || []);
-      
-      // Extract unique categories
-      const uniqueCategories = ['All', ...new Set((data || []).map(p => p.category).filter(Boolean))];
-      setCategories(uniqueCategories);
-    }
+    if (prodError) console.error('Error fetching products:', prodError);
+    else setProducts(prodData || []);
+
     setLoading(false);
   };
 
   const handleWhatsAppClick = (product) => {
     const phoneNumber = import.meta.env.VITE_WHATSAPP_NUMBER || '';
     if (!phoneNumber) {
-      alert("Configurar el número de WhatsApp en .env.local");
+      toast.error("Configurar el número de WhatsApp en .env.local");
       return;
     }
     
@@ -48,9 +54,9 @@ export default function Landing() {
     window.open(whatsappUrl, '_blank');
   };
 
-  const filteredProducts = selectedCategory === 'All' 
+  const filteredProducts = selectedCategoryId === 'All' 
     ? products 
-    : products.filter(p => p.category === selectedCategory);
+    : products.filter(p => p.category_id === selectedCategoryId);
 
   return (
     <div className="landing-container">
@@ -93,13 +99,19 @@ export default function Landing() {
       <main className="container main-content">
         {/* Categories Bar */}
         <div className="categories-wrapper">
+          <button 
+            className={`category-pill ${selectedCategoryId === 'All' ? 'active' : ''}`}
+            onClick={() => setSelectedCategoryId('All')}
+          >
+            Todos
+          </button>
           {categories.map(cat => (
             <button 
-              key={cat} 
-              className={`category-pill ${selectedCategory === cat ? 'active' : ''}`}
-              onClick={() => setSelectedCategory(cat)}
+              key={cat.id} 
+              className={`category-pill ${selectedCategoryId === cat.id ? 'active' : ''}`}
+              onClick={() => setSelectedCategoryId(cat.id)}
             >
-              {cat}
+              {cat.name}
             </button>
           ))}
         </div>
@@ -119,7 +131,9 @@ export default function Landing() {
                   ) : (
                     <div className="product-image-placeholder">Sin imagen</div>
                   )}
-                  {product.category && <span className="product-badge">{product.category}</span>}
+                  {product.categories?.name && (
+                    <span className="product-badge">{product.categories.name}</span>
+                  )}
                 </div>
                 
                 <div className="product-info">

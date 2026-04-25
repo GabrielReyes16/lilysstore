@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { Toaster } from 'react-hot-toast';
 import { supabase } from './services/supabaseClient';
 
 import Landing from './pages/Landing';
@@ -38,6 +39,7 @@ function App() {
 
   return (
     <Router>
+      <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />

@@ -23,8 +23,39 @@
   gap: 0.5rem;
 }
 
+/* Tabs */
+.admin-tabs-container {
+  background-color: var(--card);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2rem;
+}
+
+.admin-tabs {
+  display: flex;
+  gap: 2rem;
+}
+
+.tab-btn {
+  padding: 1rem 0;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+  font-size: 0.95rem;
+}
+
+.tab-btn:hover {
+  color: var(--foreground);
+}
+
+.tab-btn.active {
+  color: var(--primary-dark);
+  border-bottom-color: var(--primary-dark);
+}
+
+/* Main Content */
 .admin-main {
-  padding: 2rem 1rem;
+  padding: 0 1rem 4rem 1rem;
   display: grid;
   gap: 2rem;
   grid-template-columns: 1fr;
@@ -51,6 +82,12 @@
   font-size: 1.25rem;
   padding-bottom: 0.75rem;
   border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+}
+
+.inline-icon {
+  margin-right: 0.5rem;
 }
 
 /* Form Styles */
@@ -103,6 +140,52 @@
   gap: 1rem;
   justify-content: flex-end;
   margin-top: 1rem;
+}
+
+/* Category Specific */
+.category-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.category-form .form-group {
+  flex-grow: 1;
+}
+
+.category-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.category-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background-color: var(--muted);
+  border-radius: 6px;
+  font-size: 0.95rem;
+  border: 1px solid transparent;
+}
+
+.category-item:hover {
+  border-color: var(--border);
+}
+
+.delete-icon {
+  color: var(--muted-foreground);
+  padding: 0.25rem;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.delete-icon:hover {
+  background-color: #fee2e2;
+  color: #ef4444;
 }
 
 /* Product List */
@@ -237,4 +320,7 @@
 }
 .text-sm {
   font-size: 0.875rem;
+}
+.text-muted {
+  color: var(--muted-foreground);
 }
