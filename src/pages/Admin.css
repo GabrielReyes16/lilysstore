@@ -63,7 +63,7 @@
 
 @media (min-width: 992px) {
   .admin-main {
-    grid-template-columns: 350px 1fr;
+    grid-template-columns: 480px 1fr;
     align-items: start;
   }
 }

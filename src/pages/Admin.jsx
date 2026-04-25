@@ -19,6 +19,7 @@ export default function Admin({ session }) {
   const [categoryId, setCategoryId] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
+  const [originalPrice, setOriginalPrice] = useState('');
   const [isActive, setIsActive] = useState(true);
   const [imageFile, setImageFile] = useState(null);
   const [imageUrl, setImageUrl] = useState('');
@@ -67,6 +68,7 @@ export default function Admin({ session }) {
     setCategoryId('');
     setDescription('');
     setPrice('');
+    setOriginalPrice('');
     setIsActive(true);
     setImageFile(null);
     setImageUrl('');
@@ -82,6 +84,7 @@ export default function Admin({ session }) {
     setCategoryId(product.category_id || '');
     setDescription(product.description || '');
     setPrice(product.price);
+    setOriginalPrice(product.original_price || '');
     setIsActive(product.is_active);
     setImageUrl(product.image_url || '');
     setImageFile(null);
@@ -154,6 +157,7 @@ export default function Admin({ session }) {
         category_id: categoryId ? categoryId : null,
         description,
         price: parseFloat(price),
+        original_price: originalPrice ? parseFloat(originalPrice) : null,
         is_active: isActive,
         image_url: finalImageUrl,
       };
@@ -346,7 +350,7 @@ export default function Admin({ session }) {
 
                 <div className="form-row">
                   <div className="form-group">
-                    <label>Precio (s/)</label>
+                    <label>Precio de Oferta (Actual s/)</label>
                     <input
                       type="number"
                       step="0.01"
@@ -357,17 +361,37 @@ export default function Admin({ session }) {
                     />
                   </div>
                   <div className="form-group">
-                    <label>Imagen</label>
-                    <div className="file-input-wrapper">
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={e => setImageFile(e.target.files[0])}
-                        className="form-control file-input"
-                      />
-                      {imageUrl && !imageFile && <span className="text-sm text-green-600">Imagen actual guardada ✓</span>}
-                    </div>
+                    <label>Precio Original (Opcional s/)</label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      className="form-control"
+                      value={originalPrice}
+                      onChange={e => setOriginalPrice(e.target.value)}
+                    />
                   </div>
+                </div>
+
+                <div className="form-group">
+                  <label>Imagen</label>
+                  <div className="file-input-wrapper">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={e => setImageFile(e.target.files[0])}
+                      className="form-control file-input"
+                    />
+                    {imageUrl && !imageFile && <span className="text-sm text-green-600" style={{display: 'block', marginTop: '0.5rem'}}>Imagen actual guardada ✓</span>}
+                  </div>
+                  {(imageFile || imageUrl) && (
+                    <div style={{ marginTop: '1rem', border: '1px dashed var(--border)', borderRadius: 'var(--radius)', padding: '0.5rem', textAlign: 'center', backgroundColor: 'var(--muted)' }}>
+                      <img 
+                        src={imageFile ? URL.createObjectURL(imageFile) : imageUrl} 
+                        alt="preview" 
+                        style={{ maxWidth: '100%', maxHeight: '180px', objectFit: 'contain', borderRadius: '4px' }}
+                      />
+                    </div>
+                  )}
                 </div>
 
                 <div className="form-group">
@@ -391,11 +415,9 @@ export default function Admin({ session }) {
                 </div>
 
                 <div className="form-actions">
-                  {isEditingProduct && (
-                    <button type="button" className="btn btn-outline" onClick={resetProductForm}>
-                      Cancelar
-                    </button>
-                  )}
+                  <button type="button" className="btn btn-outline" onClick={resetProductForm}>
+                    {isEditingProduct ? 'Cancelar' : 'Limpiar'}
+                  </button>
                   <button type="submit" className="btn btn-primary" disabled={uploading}>
                     {uploading ? 'Guardando...' : (isEditingProduct ? 'Actualizar' : 'Crear Producto')}
                   </button>
@@ -424,7 +446,14 @@ export default function Admin({ session }) {
                           <h4>{product.name}</h4>
                           <div className="item-meta">
                             <span className="badge">{product.categories?.name || 'Sin categoría'}</span>
-                            <span className="meta-price">${product.price}</span>
+                            {product.original_price ? (
+                              <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                                <span style={{ color: '#dc2626', textDecoration: 'line-through', fontSize: '0.8rem' }}>s/{product.original_price}</span>
+                                <span style={{ color: '#16a34a', fontWeight: 'bold' }}>s/{product.price}</span>
+                              </div>
+                            ) : (
+                              <span className="meta-price">s/{product.price}</span>
+                            )}
                             <span className={`status-dot ${product.is_active ? 'active' : 'inactive'}`}>
                               {product.is_active ? 'Visible' : 'Oculto'}
                             </span>

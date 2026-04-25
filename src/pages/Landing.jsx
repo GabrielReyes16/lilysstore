@@ -142,7 +142,14 @@ export default function Landing() {
                   <h3>{product.name}</h3>
                   <p className="product-desc">{product.description}</p>
                   <div className="product-footer">
-                    <span className="price">${product.price}</span>
+                    {product.original_price ? (
+                      <div className="price-wrapper">
+                        <span className="price-original">s/{product.original_price}</span>
+                        <span className="price price-offer">s/{product.price}</span>
+                      </div>
+                    ) : (
+                      <span className="price">s/{product.price}</span>
+                    )}
                     <button
                       onClick={() => handleWhatsAppClick(product)}
                       className="btn btn-primary ws-btn"

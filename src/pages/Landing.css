@@ -238,6 +238,22 @@
   color: var(--foreground);
 }
 
+.price-wrapper {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.price-original {
+  font-size: 0.85rem;
+  color: #dc2626; /* Red strikethrough */
+  text-decoration: line-through;
+}
+
+.price.price-offer {
+  color: #16a34a; /* Green offer price */
+}
+
 .ws-btn {
   display: flex;
   gap: 0.5rem;
